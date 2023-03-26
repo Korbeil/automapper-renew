@@ -1,10 +1,18 @@
 <?php
 
+/*
+ * This file is part of the Symfony package.
+ *
+ * (c) Fabien Potencier <fabien@symfony.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Jane\Component\AutoMapper\Generator;
 
 use Jane\Component\AutoMapper\AutoMapperRegistryInterface;
 use Jane\Component\AutoMapper\Exception\CompileException;
-use Jane\Component\AutoMapper\Extractor\WriteMutator;
 use Jane\Component\AutoMapper\Extractor\WriteMutatorType;
 use Jane\Component\AutoMapper\GeneratedMapper;
 use Jane\Component\AutoMapper\MapperContext;
@@ -148,7 +156,7 @@ final class Generator
                 continue;
             }
 
-            if ($propertyMapping->writeMutator->getType() !== WriteMutatorType::ADDER_AND_REMOVER) {
+            if (WriteMutatorType::ADDER_AND_REMOVER !== $propertyMapping->writeMutator->getType()) {
                 $writeExpression = $propertyMapping->writeMutator->getExpression($result, $output, $transformer instanceof AssignedByReferenceTransformerInterface ? $transformer->assignByRef() : false);
                 if (null === $writeExpression) {
                     continue;
@@ -354,7 +362,7 @@ final class Generator
             [$output, $createObjectStatements] = $propertyMapping->transformer->transform($propertyMapping->readAccessor->getExpression($sourceInput), $result, $propertyMapping, $uniqueVariableScope);
 
             foreach ($classDiscriminatorMapping->getTypesMapping() as $typeValue => $typeTarget) {
-                $mapperName = 'Discriminator_Mapper_' . $source . '_' . $typeTarget;
+                $mapperName = 'Discriminator_Mapper_'.$source.'_'.$typeTarget;
 
                 $injectMapperStatements[] = new Stmt\Expression(new Expr\Assign(
                     new Expr\ArrayDimFetch(new Expr\PropertyFetch(new Expr\Variable('this'), 'mappers'), new Scalar\String_($mapperName)),
@@ -470,7 +478,7 @@ final class Generator
 
     private function getValueAsExpr(mixed $value): Expr
     {
-        $expr = $this->parser->parse('<?php ' . var_export($value, true) . ';')[0];
+        $expr = $this->parser->parse('<?php '.var_export($value, true).';')[0];
 
         if ($expr instanceof Stmt\Expression) {
             return $expr->expr;

@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the Symfony package.
+ *
+ * (c) Fabien Potencier <fabien@symfony.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Jane\Component\AutoMapper\Extractor;
 
 use Jane\Component\AutoMapper\Exception\CompileException;
@@ -19,9 +28,9 @@ use PhpParser\Node\Stmt;
 final class WriteMutator
 {
     public function __construct(
-        private readonly WriteMutatorType      $type,
-        private readonly string                $name,
-        private readonly bool                  $private = false,
+        private readonly WriteMutatorType $type,
+        private readonly string $name,
+        private readonly bool $private = false,
         private readonly ?\ReflectionParameter $parameter = null
     ) {
     }

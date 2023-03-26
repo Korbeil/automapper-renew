@@ -1,19 +1,20 @@
 <?php
 
-namespace Jane\Component\AutoMapper\Extractor;
+/*
+ * This file is part of the Symfony package.
+ *
+ * (c) Fabien Potencier <fabien@symfony.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
-use Jane\Component\AutoMapper\Exception\CompileException;
-use PhpParser\Node\Arg;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Name;
-use PhpParser\Node\Param;
-use PhpParser\Node\Scalar;
-use PhpParser\Node\Stmt;
+namespace Jane\Component\AutoMapper\Extractor;
 
 /**
  * @internal
  *
- * Read accessor types.
+ * Read accessor types
  *
  * @author Joel Wurtz <jwurtz@jolicode.com>
  * @author Baptiste Leduc <baptiste.leduc@gmail.com>

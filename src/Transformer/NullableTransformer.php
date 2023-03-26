@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the Symfony package.
+ *
+ * (c) Fabien Potencier <fabien@symfony.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Jane\Component\AutoMapper\Transformer;
 
 use Jane\Component\AutoMapper\Extractor\PropertyMapping;
@@ -16,7 +25,6 @@ use PhpParser\Node\Stmt;
  */
 final class NullableTransformer implements TransformerInterface, DependentTransformerInterface
 {
-
     public function __construct(
         private readonly TransformerInterface $itemTransformer,
         private readonly bool $isTargetNullable

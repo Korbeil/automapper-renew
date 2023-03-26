@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the Symfony package.
+ *
+ * (c) Fabien Potencier <fabien@symfony.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Jane\Component\AutoMapper\Transformer;
 
 use Jane\Component\AutoMapper\MapperMetadataInterface;
@@ -38,7 +47,7 @@ final class ChainTransformerFactory implements TransformerFactoryInterface
     {
         $this->sortFactories();
 
-        $transformerFactoryClass = \get_class($transformerFactory);
+        $transformerFactoryClass = $transformerFactory::class;
         foreach ($this->sorted as $factory) {
             if (is_a($factory, $transformerFactoryClass)) {
                 return true;

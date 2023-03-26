@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the Symfony package.
+ *
+ * (c) Fabien Potencier <fabien@symfony.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Jane\Component\AutoMapper\Transformer;
 
 use Jane\Component\AutoMapper\Extractor\PropertyMapping;
@@ -29,14 +38,14 @@ final class ObjectTransformer implements TransformerInterface, DependentTransfor
         $mapperName = $this->getDependencyName();
 
         return [new Expr\MethodCall(new Expr\ArrayDimFetch(
-                new Expr\PropertyFetch(new Expr\Variable('this'), 'mappers'),
+            new Expr\PropertyFetch(new Expr\Variable('this'), 'mappers'),
             new Scalar\String_($mapperName)
-            ), 'map', [
-                new Arg($input),
-                new Arg(new Expr\StaticCall(new Name\FullyQualified(MapperContext::class), 'withNewContext', [
-                    new Arg(new Expr\Variable('context')),
-                    new Arg(new Scalar\String_($propertyMapping->property)),
-                ])),
+        ), 'map', [
+            new Arg($input),
+            new Arg(new Expr\StaticCall(new Name\FullyQualified(MapperContext::class), 'withNewContext', [
+                new Arg(new Expr\Variable('context')),
+                new Arg(new Scalar\String_($propertyMapping->property)),
+            ])),
         ]), []];
     }
 
@@ -52,7 +61,7 @@ final class ObjectTransformer implements TransformerInterface, DependentTransfor
 
     private function getDependencyName(): string
     {
-        return 'Mapper_' . $this->getSource() . '_' . $this->getTarget();
+        return 'Mapper_'.$this->getSource().'_'.$this->getTarget();
     }
 
     private function getSource(): string

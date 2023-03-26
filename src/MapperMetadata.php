@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the Symfony package.
+ *
+ * (c) Fabien Potencier <fabien@symfony.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Jane\Component\AutoMapper;
 
 use Jane\Component\AutoMapper\Extractor\MappingExtractorInterface;
@@ -17,11 +26,10 @@ use Jane\Component\AutoMapper\Transformer\DependentTransformerInterface;
  */
 class MapperMetadata implements MapperGeneratorMetadataInterface
 {
-
-    /** @var array<string, callable> $customMapping */
+    /** @var array<string, callable> */
     private array $customMapping = [];
 
-    /** @var array<PropertyMapping>|null $propertiesMapping */
+    /** @var array<PropertyMapping>|null */
     private ?array $propertiesMapping = null;
 
     private ?string $className = null;

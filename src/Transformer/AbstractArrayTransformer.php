@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the Symfony package.
+ *
+ * (c) Fabien Potencier <fabien@symfony.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Jane\Component\AutoMapper\Transformer;
 
 use Jane\Component\AutoMapper\Extractor\PropertyMapping;
@@ -38,7 +47,7 @@ abstract class AbstractArrayTransformer implements TransformerInterface, Depende
 
         [$output, $itemStatements] = $this->itemTransformer->transform($loopValueVar, $target, $propertyMapping, $uniqueVariableScope);
 
-        if ($propertyMapping->writeMutator && $propertyMapping->writeMutator->getType() === WriteMutatorType::ADDER_AND_REMOVER) {
+        if ($propertyMapping->writeMutator && WriteMutatorType::ADDER_AND_REMOVER === $propertyMapping->writeMutator->getType()) {
             $mappedValueVar = new Expr\Variable($uniqueVariableScope->getUniqueName('mappedValue'));
             $itemStatements[] = new Stmt\Expression(new Expr\Assign($mappedValueVar, $output));
             $itemStatements[] = new Stmt\If_(new Expr\BinaryOp\NotIdentical(new Expr\ConstFetch(new Name('null')), $mappedValueVar), [

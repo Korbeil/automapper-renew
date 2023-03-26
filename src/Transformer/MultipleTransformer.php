@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the Symfony package.
+ *
+ * (c) Fabien Potencier <fabien@symfony.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Jane\Component\AutoMapper\Transformer;
 
 use Jane\Component\AutoMapper\Extractor\PropertyMapping;
@@ -34,7 +43,7 @@ final class MultipleTransformer implements TransformerInterface, DependentTransf
         Type::BUILTIN_TYPE_ITERABLE => 'is_iterable',
     ];
 
-    /** @var TransformerInterface[] $transformers */
+    /** @var TransformerInterface[] */
     private array $transformers;
 
     public function __construct(array $transformers)

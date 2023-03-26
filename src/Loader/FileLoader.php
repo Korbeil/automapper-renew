@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the Symfony package.
+ *
+ * (c) Fabien Potencier <fabien@symfony.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Jane\Component\AutoMapper\Loader;
 
 use Jane\Component\AutoMapper\Generator\Generator;
@@ -28,7 +37,7 @@ final class FileLoader implements ClassLoaderInterface
     public function loadClass(MapperGeneratorMetadataInterface $mapperMetadata): void
     {
         $className = $mapperMetadata->getMapperClassName();
-        $classPath = $this->directory . \DIRECTORY_SEPARATOR . $className . '.php';
+        $classPath = $this->directory.\DIRECTORY_SEPARATOR.$className.'.php';
 
         if (!$this->hotReload && file_exists($classPath)) {
             require $classPath;
@@ -53,10 +62,10 @@ final class FileLoader implements ClassLoaderInterface
     public function saveMapper(MapperGeneratorMetadataInterface $mapperGeneratorMetadata): void
     {
         $className = $mapperGeneratorMetadata->getMapperClassName();
-        $classPath = $this->directory . \DIRECTORY_SEPARATOR . $className . '.php';
+        $classPath = $this->directory.\DIRECTORY_SEPARATOR.$className.'.php';
         $classCode = $this->printer->prettyPrint([$this->generator->generate($mapperGeneratorMetadata)]);
 
-        $this->write($classPath, "<?php\n\n" . $classCode . "\n");
+        $this->write($classPath, "<?php\n\n".$classCode."\n");
         if ($this->hotReload) {
             $this->addHashToRegistry($className, $mapperGeneratorMetadata->getHash());
         }
@@ -64,15 +73,15 @@ final class FileLoader implements ClassLoaderInterface
 
     private function addHashToRegistry($className, $hash): void
     {
-        $registryPath = $this->directory . \DIRECTORY_SEPARATOR . 'registry.php';
+        $registryPath = $this->directory.\DIRECTORY_SEPARATOR.'registry.php';
         $this->registry[$className] = $hash;
-        $this->write($registryPath, "<?php\n\nreturn " . var_export($this->registry, true) . ";\n");
+        $this->write($registryPath, "<?php\n\nreturn ".var_export($this->registry, true).";\n");
     }
 
     private function getRegistry(): array
     {
         if (!$this->registry) {
-            $registryPath = $this->directory . \DIRECTORY_SEPARATOR . 'registry.php';
+            $registryPath = $this->directory.\DIRECTORY_SEPARATOR.'registry.php';
 
             if (!file_exists($registryPath)) {
                 $this->registry = [];
@@ -92,7 +101,7 @@ final class FileLoader implements ClassLoaderInterface
 
         $fp = fopen($file, 'w');
 
-        if (flock($fp, LOCK_EX)) {
+        if (flock($fp, \LOCK_EX)) {
             fwrite($fp, $contents);
         }
 

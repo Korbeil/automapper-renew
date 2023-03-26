@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the Symfony package.
+ *
+ * (c) Fabien Potencier <fabien@symfony.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Jane\Component\AutoMapper;
 
 use Jane\Component\AutoMapper\Exception\CircularReferenceException;
@@ -90,7 +99,7 @@ class MapperContext
     /**
      * Whether a reference has reached its limit.
      */
-    public static function shouldHandleCircularReference(array $context, string $reference, ?int $circularReferenceLimit = null): bool
+    public static function shouldHandleCircularReference(array $context, string $reference, int $circularReferenceLimit = null): bool
     {
         if (!\array_key_exists($reference, $context[self::CIRCULAR_REFERENCE_REGISTRY] ?? [])) {
             return false;
@@ -112,7 +121,7 @@ class MapperContext
      *
      * By default, will try to keep it and return the previous value
      */
-    public static function &handleCircularReference(array &$context, string $reference, $object, ?int $circularReferenceLimit = null, callable $callback = null): mixed
+    public static function &handleCircularReference(array &$context, string $reference, $object, int $circularReferenceLimit = null, callable $callback = null): mixed
     {
         if (null === $callback) {
             $callback = $context[self::CIRCULAR_REFERENCE_HANDLER] ?? null;
@@ -131,7 +140,7 @@ class MapperContext
 
         if (null !== $circularReferenceLimit) {
             if ($circularReferenceLimit <= ($context[self::CIRCULAR_COUNT_REFERENCE_REGISTRY][$reference] ?? 0)) {
-                throw new CircularReferenceException(sprintf('A circular reference has been detected when mapping the object of type "%s" (configured limit: %d)', \is_object($object) ? \get_class($object) : 'array', $circularReferenceLimit));
+                throw new CircularReferenceException(sprintf('A circular reference has been detected when mapping the object of type "%s" (configured limit: %d)', \is_object($object) ? $object::class : 'array', $circularReferenceLimit));
             }
 
             ++$context[self::CIRCULAR_COUNT_REFERENCE_REGISTRY][$reference];

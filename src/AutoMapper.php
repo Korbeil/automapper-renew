@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the Symfony package.
+ *
+ * (c) Fabien Potencier <fabien@symfony.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Jane\Component\AutoMapper;
 
 use Doctrine\Common\Annotations\AnnotationReader;
@@ -62,7 +71,7 @@ class AutoMapper implements AutoMapperInterface, AutoMapperRegistryInterface, Ma
         $metadata = $this->getMetadata($source, $target);
 
         if (null === $metadata) {
-            throw new NoMappingFoundException('No mapping found for source ' . $source . ' and target ' . $target);
+            throw new NoMappingFoundException('No mapping found for source '.$source.' and target '.$target);
         }
 
         $className = $metadata->getMapperClassName();
@@ -99,7 +108,7 @@ class AutoMapper implements AutoMapperInterface, AutoMapperRegistryInterface, Ma
         }
 
         if (\is_object($source)) {
-            $guessedSource = \get_class($source);
+            $guessedSource = $source::class;
         } elseif (\is_array($source)) {
             $guessedSource = 'array';
         }
@@ -109,7 +118,7 @@ class AutoMapper implements AutoMapperInterface, AutoMapperRegistryInterface, Ma
         }
 
         if (\is_object($target)) {
-            $guessedTarget = \get_class($target);
+            $guessedTarget = $target::class;
             $context[MapperContext::TARGET_TO_POPULATE] = $target;
         } elseif (\is_array($target)) {
             $guessedTarget = 'array';

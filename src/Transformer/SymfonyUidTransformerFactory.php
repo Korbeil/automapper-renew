@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the Symfony package.
+ *
+ * (c) Fabien Potencier <fabien@symfony.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Jane\Component\AutoMapper\Transformer;
 
 use Jane\Component\AutoMapper\MapperMetadataInterface;
@@ -49,7 +58,7 @@ final class SymfonyUidTransformerFactory extends AbstractUniqueTypeTransformerFa
 
         if (!\array_key_exists($type->getClassName(), $this->reflectionCache)) {
             $reflClass = new \ReflectionClass($type->getClassName());
-            $this->reflectionCache[$type->getClassName()] = [$reflClass->isSubclassOf(AbstractUid::class), $type->getClassName() === Ulid::class];
+            $this->reflectionCache[$type->getClassName()] = [$reflClass->isSubclassOf(AbstractUid::class), Ulid::class === $type->getClassName()];
         }
 
         return $this->reflectionCache[$type->getClassName()][0];
