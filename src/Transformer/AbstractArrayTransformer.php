@@ -3,7 +3,7 @@
 namespace Jane\Component\AutoMapper\Transformer;
 
 use Jane\Component\AutoMapper\Extractor\PropertyMapping;
-use Jane\Component\AutoMapper\Extractor\WriteMutator;
+use Jane\Component\AutoMapper\Extractor\WriteMutatorType;
 use Jane\Component\AutoMapper\Generator\UniqueVariableScope;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Name;
@@ -14,17 +14,15 @@ use PhpParser\Node\Stmt;
  */
 abstract class AbstractArrayTransformer implements TransformerInterface, DependentTransformerInterface
 {
-    private $itemTransformer;
-
-    public function __construct(TransformerInterface $itemTransformer)
-    {
-        $this->itemTransformer = $itemTransformer;
+    public function __construct(
+        private readonly TransformerInterface $itemTransformer
+    ) {
     }
 
     abstract protected function getAssignExpr(Expr $valuesVar, Expr $outputVar, Expr $loopKeyVar, bool $assignByRef): Expr;
 
     /**
-     * {@inheritdoc}
+     * @return array{0: Expr\Variable[], 1: Stmt[]}
      */
     public function transform(Expr $input, Expr $target, PropertyMapping $propertyMapping, UniqueVariableScope $uniqueVariableScope): array
     {
@@ -40,12 +38,12 @@ abstract class AbstractArrayTransformer implements TransformerInterface, Depende
 
         [$output, $itemStatements] = $this->itemTransformer->transform($loopValueVar, $target, $propertyMapping, $uniqueVariableScope);
 
-        if ($propertyMapping->getWriteMutator() && $propertyMapping->getWriteMutator()->getType() === WriteMutator::TYPE_ADDER_AND_REMOVER) {
+        if ($propertyMapping->writeMutator && $propertyMapping->writeMutator->getType() === WriteMutatorType::ADDER_AND_REMOVER) {
             $mappedValueVar = new Expr\Variable($uniqueVariableScope->getUniqueName('mappedValue'));
             $itemStatements[] = new Stmt\Expression(new Expr\Assign($mappedValueVar, $output));
             $itemStatements[] = new Stmt\If_(new Expr\BinaryOp\NotIdentical(new Expr\ConstFetch(new Name('null')), $mappedValueVar), [
                 'stmts' => [
-                    new Stmt\Expression($propertyMapping->getWriteMutator()->getExpression($target, $mappedValueVar, $assignByRef)),
+                    new Stmt\Expression($propertyMapping->writeMutator->getExpression($target, $mappedValueVar, $assignByRef)),
                 ],
             ]);
         } else {
@@ -61,7 +59,7 @@ abstract class AbstractArrayTransformer implements TransformerInterface, Depende
     }
 
     /**
-     * {@inheritdoc}
+     * @return MapperDependency[]
      */
     public function getDependencies(): array
     {

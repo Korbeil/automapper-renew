@@ -14,6 +14,7 @@ use Symfony\Component\PropertyInfo\Type;
  * Built in transformer to handle PHP scalar types.
  *
  * @author Joel Wurtz <jwurtz@jolicode.com>
+ * @author Baptiste Leduc <baptiste.leduc@gmail.com>
  */
 final class BuiltinTransformer implements TransformerInterface
 {
@@ -54,21 +55,13 @@ final class BuiltinTransformer implements TransformerInterface
         Type::BUILTIN_TYPE_RESOURCE => [],
     ];
 
-    /** @var Type */
-    private $sourceType;
-
-    /** @var Type[] */
-    private $targetTypes;
-
-    public function __construct(Type $sourceType, array $targetTypes)
-    {
-        $this->sourceType = $sourceType;
-        $this->targetTypes = $targetTypes;
+    public function __construct(
+        private readonly Type $sourceType,
+        /** @var Type[] $targetTypes */
+        private readonly array $targetTypes
+    ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function transform(Expr $input, Expr $target, PropertyMapping $propertyMapping, UniqueVariableScope $uniqueVariableScope): array
     {
         $targetTypes = array_map(function (Type $type) {
@@ -94,12 +87,12 @@ final class BuiltinTransformer implements TransformerInterface
         return [$input, []];
     }
 
-    private function toArray(Expr $input)
+    private function toArray(Expr $input): Expr\Array_
     {
         return new Expr\Array_([new Expr\ArrayItem($input)]);
     }
 
-    private function fromIteratorToArray(Expr $input)
+    private function fromIteratorToArray(Expr $input): Expr\FuncCall
     {
         return new Expr\FuncCall(new Name('iterator_to_array'), [
             new Arg($input),

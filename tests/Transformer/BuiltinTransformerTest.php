@@ -6,6 +6,9 @@ use Jane\Component\AutoMapper\Transformer\BuiltinTransformer;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\PropertyInfo\Type;
 
+/**
+ * @author Baptiste Leduc <baptiste.leduc@gmail.com>
+ */
 class BuiltinTransformerTest extends TestCase
 {
     use EvalTransformerTrait;

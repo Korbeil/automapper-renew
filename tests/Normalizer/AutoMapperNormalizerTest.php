@@ -11,8 +11,7 @@ use Jane\Component\AutoMapper\Tests\Fixtures;
  */
 class AutoMapperNormalizerTest extends AutoMapperBaseTest
 {
-    /** @var AutoMapperNormalizer */
-    protected $normalizer;
+    protected AutoMapperNormalizer $normalizer;
 
     protected function setUp(): void
     {

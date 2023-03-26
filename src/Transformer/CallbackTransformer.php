@@ -12,31 +12,23 @@ use PhpParser\Node\Scalar;
  * Handle custom callback transformation.
  *
  * @author Joel Wurtz <jwurtz@jolicode.com>
+ * @author Baptiste Leduc <baptiste.leduc@gmail.com>
  */
 final class CallbackTransformer implements TransformerInterface
 {
-    private $callbackName;
 
-    public function __construct(string $callbackName)
-    {
-        $this->callbackName = $callbackName;
+    public function __construct(
+        private readonly string $callbackName
+    ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function transform(Expr $input, Expr $target, PropertyMapping $propertyMapping, UniqueVariableScope $uniqueVariableScope): array
     {
         /*
          * $output = $this->callbacks[$callbackName]($input);
          */
 
-        $arguments = [
-            new Arg($input),
-        ];
-        if ($target instanceof Expr) {
-            $arguments[] = new Arg($target);
-        }
+        $arguments = [new Arg($input), new Arg($target)];
 
         return [new Expr\FuncCall(
             new Expr\ArrayDimFetch(new Expr\PropertyFetch(new Expr\Variable('this'), 'callbacks'), new Scalar\String_($this->callbackName)), $arguments),

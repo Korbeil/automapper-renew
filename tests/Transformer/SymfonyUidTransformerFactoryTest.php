@@ -9,6 +9,9 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\PropertyInfo\Type;
 use Symfony\Component\Uid\Ulid;
 
+/**
+ * @author Baptiste Leduc <baptiste.leduc@gmail.com>
+ */
 class SymfonyUidTransformerFactoryTest extends TestCase
 {
     public function testNoTransformer(): void

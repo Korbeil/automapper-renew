@@ -17,6 +17,7 @@ use Symfony\Component\PropertyInfo\Type;
  * It will always use the first target type possible for transformation
  *
  * @author Joel Wurtz <jwurtz@jolicode.com>
+ * @author Baptiste Leduc <baptiste.leduc@gmail.com>
  */
 final class MultipleTransformer implements TransformerInterface, DependentTransformerInterface
 {
@@ -33,16 +34,14 @@ final class MultipleTransformer implements TransformerInterface, DependentTransf
         Type::BUILTIN_TYPE_ITERABLE => 'is_iterable',
     ];
 
-    private $transformers = [];
+    /** @var TransformerInterface[] $transformers */
+    private array $transformers;
 
     public function __construct(array $transformers)
     {
         $this->transformers = $transformers;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function transform(Expr $input, Expr $target, PropertyMapping $propertyMapping, UniqueVariableScope $uniqueVariableScope): array
     {
         $output = new Expr\Variable($uniqueVariableScope->getUniqueName('value'));
@@ -77,9 +76,6 @@ final class MultipleTransformer implements TransformerInterface, DependentTransf
         return [$output, $statements];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getDependencies(): array
     {
         $dependencies = [];

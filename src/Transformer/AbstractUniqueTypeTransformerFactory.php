@@ -9,12 +9,10 @@ use Symfony\Component\PropertyInfo\Type;
  * Abstract transformer which is used by transformer needing transforming only from one single type to one single type.
  *
  * @author Joel Wurtz <jwurtz@jolicode.com>
+ * @author Baptiste Leduc <baptiste.leduc@gmail.com>
  */
 abstract class AbstractUniqueTypeTransformerFactory implements TransformerFactoryInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public function getTransformer(?array $sourceTypes, ?array $targetTypes, MapperMetadataInterface $mapperMetadata): ?TransformerInterface
     {
         $nbSourceTypes = $sourceTypes ? \count($sourceTypes) : 0;

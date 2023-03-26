@@ -6,6 +6,7 @@ namespace Jane\Component\AutoMapper;
  * Stores metadata needed when generating a mapper.
  *
  * @author Joel Wurtz <jwurtz@jolicode.com>
+ * @author Baptiste Leduc <baptiste.leduc@gmail.com>
  */
 interface MapperGeneratorMetadataInterface extends MapperMetadataInterface
 {
@@ -15,7 +16,7 @@ interface MapperGeneratorMetadataInterface extends MapperMetadataInterface
     public function getMapperClassName(): string;
 
     /**
-     * Get hash (unique key) for those metadatas.
+     * Get hash (unique key) for those metadata.
      */
     public function getHash(): string;
 

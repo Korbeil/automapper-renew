@@ -4,6 +4,7 @@ namespace Jane\Component\AutoMapper\Tests\Transformer;
 
 use Jane\Component\AutoMapper\Extractor\PropertyMapping;
 use Jane\Component\AutoMapper\Extractor\ReadAccessor;
+use Jane\Component\AutoMapper\Extractor\ReadAccessorType;
 use Jane\Component\AutoMapper\Generator\UniqueVariableScope;
 use Jane\Component\AutoMapper\Transformer\TransformerInterface;
 use PhpParser\Node\Expr;
@@ -11,13 +12,16 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt;
 use PhpParser\PrettyPrinter\Standard;
 
+/**
+ * @author Baptiste Leduc <baptiste.leduc@gmail.com>
+ */
 trait EvalTransformerTrait
 {
     private function createTransformerFunction(TransformerInterface $transformer, PropertyMapping $propertyMapping = null): \Closure
     {
         if (null === $propertyMapping) {
             $propertyMapping = new PropertyMapping(
-                new ReadAccessor(ReadAccessor::TYPE_PROPERTY, 'dummy'),
+                new ReadAccessor(ReadAccessorType::PROPERTY, 'dummy'),
                 null,
                 null,
                 $transformer,

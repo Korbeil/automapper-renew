@@ -5,6 +5,9 @@ namespace Jane\Component\AutoMapper\Tests\Transformer;
 use Jane\Component\AutoMapper\Transformer\DateTimeImmutableToMutableTransformer;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @author Baptiste Leduc <baptiste.leduc@gmail.com>
+ */
 class DateTimeImmutableToMutableTransformerTest extends TestCase
 {
     use EvalTransformerTrait;

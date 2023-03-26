@@ -5,6 +5,9 @@ namespace Jane\Component\AutoMapper\Tests\Transformer;
 use Jane\Component\AutoMapper\Transformer\CallbackTransformer;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @author Baptiste Leduc <baptiste.leduc@gmail.com>
+ */
 class CallbackTransformerTest extends TestCase
 {
     use EvalTransformerTrait;

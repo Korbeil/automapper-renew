@@ -9,19 +9,15 @@ use Symfony\Component\PropertyInfo\Type;
  * Create a decorated transformer to handle array type.
  *
  * @author Joel Wurtz <jwurtz@jolicode.com>
+ * @author Baptiste Leduc <baptiste.leduc@gmail.com>
  */
 final class ArrayTransformerFactory extends AbstractUniqueTypeTransformerFactory implements PrioritizedTransformerFactoryInterface
 {
-    private $chainTransformerFactory;
-
-    public function __construct(ChainTransformerFactory $chainTransformerFactory)
-    {
-        $this->chainTransformerFactory = $chainTransformerFactory;
+    public function __construct(
+        private readonly ChainTransformerFactory $chainTransformerFactory
+    ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function createTransformer(Type $sourceType, Type $targetType, MapperMetadataInterface $mapperMetadata): ?TransformerInterface
     {
         if (!$sourceType->isCollection()) {
@@ -52,9 +48,6 @@ final class ArrayTransformerFactory extends AbstractUniqueTypeTransformerFactory
         return null;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getPriority(): int
     {
         return 4;

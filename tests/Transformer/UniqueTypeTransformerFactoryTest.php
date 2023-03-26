@@ -10,6 +10,9 @@ use Jane\Component\AutoMapper\Transformer\UniqueTypeTransformerFactory;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\PropertyInfo\Type;
 
+/**
+ * @author Baptiste Leduc <baptiste.leduc@gmail.com>
+ */
 class UniqueTypeTransformerFactoryTest extends TestCase
 {
     public function testGetTransformer(): void

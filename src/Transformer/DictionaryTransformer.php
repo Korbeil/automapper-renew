@@ -8,6 +8,7 @@ use PhpParser\Node\Expr;
  * Transformer dictionary decorator.
  *
  * @author Baptiste Leduc <baptiste.leduc@gmail.com>
+ * @author Baptiste Leduc <baptiste.leduc@gmail.com>
  */
 final class DictionaryTransformer extends AbstractArrayTransformer
 {

@@ -12,19 +12,15 @@ use PhpParser\Node\Scalar\String_;
  * Transform a \DateTimeInterface object to a string.
  *
  * @author Joel Wurtz <jwurtz@jolicode.com>
+ * @author Baptiste Leduc <baptiste.leduc@gmail.com>
  */
 final class DateTimeToStringTransformer implements TransformerInterface
 {
-    private $format;
-
-    public function __construct(string $format = \DateTimeInterface::RFC3339)
-    {
-        $this->format = $format;
+    public function __construct(
+        private readonly string $format = \DateTimeInterface::RFC3339
+    ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function transform(Expr $input, Expr $target, PropertyMapping $propertyMapping, UniqueVariableScope $uniqueVariableScope): array
     {
         return [new Expr\MethodCall($input, 'format', [

@@ -7,33 +7,21 @@ use Jane\Component\AutoMapper\Extractor\FromTargetMappingExtractor;
 use Jane\Component\AutoMapper\Extractor\SourceTargetMappingExtractor;
 
 /**
- * Metadata factory, used to autoregistering new mapping without creating them.
+ * Metadata factory, used to auto-registering new mapping without creating them.
  *
  * @author Joel Wurtz <jwurtz@jolicode.com>
+ * @author Baptiste Leduc <baptiste.leduc@gmail.com>
  */
 final class MapperGeneratorMetadataFactory implements MapperGeneratorMetadataFactoryInterface
 {
-    private $sourceTargetPropertiesMappingExtractor;
-    private $fromSourcePropertiesMappingExtractor;
-    private $fromTargetPropertiesMappingExtractor;
-    private $classPrefix;
-    private $attributeChecking;
-    private $dateTimeFormat;
-
     public function __construct(
-        SourceTargetMappingExtractor $sourceTargetPropertiesMappingExtractor,
-        FromSourceMappingExtractor $fromSourcePropertiesMappingExtractor,
-        FromTargetMappingExtractor $fromTargetPropertiesMappingExtractor,
-        string $classPrefix = 'Mapper_',
-        bool $attributeChecking = true,
-        string $dateTimeFormat = \DateTime::RFC3339
+        private readonly SourceTargetMappingExtractor $sourceTargetPropertiesMappingExtractor,
+        private readonly FromSourceMappingExtractor $fromSourcePropertiesMappingExtractor,
+        private readonly FromTargetMappingExtractor $fromTargetPropertiesMappingExtractor,
+        private readonly string $classPrefix = 'Mapper_',
+        private readonly bool $attributeChecking = true,
+        private readonly string $dateTimeFormat = \DateTimeInterface::RFC3339
     ) {
-        $this->sourceTargetPropertiesMappingExtractor = $sourceTargetPropertiesMappingExtractor;
-        $this->fromSourcePropertiesMappingExtractor = $fromSourcePropertiesMappingExtractor;
-        $this->fromTargetPropertiesMappingExtractor = $fromTargetPropertiesMappingExtractor;
-        $this->classPrefix = $classPrefix;
-        $this->attributeChecking = $attributeChecking;
-        $this->dateTimeFormat = $dateTimeFormat;
     }
 
     /**

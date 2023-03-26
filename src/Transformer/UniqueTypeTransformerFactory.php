@@ -8,19 +8,15 @@ use Jane\Component\AutoMapper\MapperMetadataInterface;
  * Reduce array of type to only one type on source and target.
  *
  * @author Joel Wurtz <jwurtz@jolicode.com>
+ * @author Baptiste Leduc <baptiste.leduc@gmail.com>
  */
 final class UniqueTypeTransformerFactory implements TransformerFactoryInterface, PrioritizedTransformerFactoryInterface
 {
-    private $chainTransformerFactory;
-
-    public function __construct(ChainTransformerFactory $chainTransformerFactory)
-    {
-        $this->chainTransformerFactory = $chainTransformerFactory;
+    public function __construct(
+        private readonly ChainTransformerFactory $chainTransformerFactory,
+    ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getTransformer(?array $sourceTypes, ?array $targetTypes, MapperMetadataInterface $mapperMetadata): ?TransformerInterface
     {
         $nbSourceTypes = $sourceTypes ? \count($sourceTypes) : 0;
@@ -49,9 +45,6 @@ final class UniqueTypeTransformerFactory implements TransformerFactoryInterface,
         return null;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getPriority(): int
     {
         return 32;

@@ -28,8 +28,7 @@ use Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader;
  */
 class MapperGeneratorMetadataFactoryTest extends AutoMapperBaseTest
 {
-    /** @var MapperGeneratorMetadataFactoryInterface */
-    protected $factory;
+    protected MapperGeneratorMetadataFactoryInterface $factory;
 
     protected function setUp(): void
     {

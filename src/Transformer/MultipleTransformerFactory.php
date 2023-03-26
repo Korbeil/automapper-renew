@@ -6,19 +6,15 @@ use Jane\Component\AutoMapper\MapperMetadataInterface;
 
 /**
  * @author Joel Wurtz <jwurtz@jolicode.com>
+ * @author Baptiste Leduc <baptiste.leduc@gmail.com>
  */
 final class MultipleTransformerFactory implements TransformerFactoryInterface, PrioritizedTransformerFactoryInterface
 {
-    private $chainTransformerFactory;
-
-    public function __construct(ChainTransformerFactory $chainTransformerFactory)
-    {
-        $this->chainTransformerFactory = $chainTransformerFactory;
+    public function __construct(
+        private readonly ChainTransformerFactory $chainTransformerFactory,
+    ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getTransformer(?array $sourceTypes, ?array $targetTypes, MapperMetadataInterface $mapperMetadata): ?TransformerInterface
     {
         if (null === $sourceTypes || \count($sourceTypes) <= 1) {
@@ -49,9 +45,6 @@ final class MultipleTransformerFactory implements TransformerFactoryInterface, P
         return null;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getPriority(): int
     {
         return 128;

@@ -6,6 +6,9 @@ use Jane\Component\AutoMapper\Transformer\ObjectTransformer;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\PropertyInfo\Type;
 
+/**
+ * @author Baptiste Leduc <baptiste.leduc@gmail.com>
+ */
 class ObjectTransformerTest extends TestCase
 {
     use EvalTransformerTrait;

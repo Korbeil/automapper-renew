@@ -5,6 +5,9 @@ namespace Jane\Component\AutoMapper\Tests\Generator;
 use Jane\Component\AutoMapper\Generator\UniqueVariableScope;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @author Baptiste Leduc <baptiste.leduc@gmail.com>
+ */
 class UniqueVariableScopeTest extends TestCase
 {
     public function testVariableNameNotEquals(): void

@@ -10,9 +10,12 @@ use Jane\Component\AutoMapper\Transformer\NullableTransformerFactory;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\PropertyInfo\Type;
 
+/**
+ * @author Baptiste Leduc <baptiste.leduc@gmail.com>
+ */
 class NullableTransformerFactoryTest extends TestCase
 {
-    private $isTargetNullableProperty;
+    private \ReflectionProperty $isTargetNullableProperty;
 
     protected function setUp(): void
     {

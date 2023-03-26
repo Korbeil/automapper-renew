@@ -5,6 +5,9 @@ namespace Jane\Component\AutoMapper\Tests\Transformer;
 use Jane\Component\AutoMapper\Transformer\StringToDateTimeTransformer;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @author Baptiste Leduc <baptiste.leduc@gmail.com>
+ */
 class StringToDateTimeTransformerTest extends TestCase
 {
     use EvalTransformerTrait;

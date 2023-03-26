@@ -15,16 +15,11 @@ use PhpParser\Node\Name;
  */
 final class StringToSymfonyUidTransformer implements TransformerInterface
 {
-    private $className;
-
-    public function __construct(string $className)
-    {
-        $this->className = $className;
+    public function __construct(
+        private readonly string $className,
+    ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function transform(Expr $input, Expr $target, PropertyMapping $propertyMapping, UniqueVariableScope $uniqueVariableScope): array
     {
         return [

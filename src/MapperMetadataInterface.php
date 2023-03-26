@@ -8,6 +8,7 @@ use Jane\Component\AutoMapper\Extractor\PropertyMapping;
  * Stores metadata needed for mapping data.
  *
  * @author Joel Wurtz <jwurtz@jolicode.com>
+ * @author Baptiste Leduc <baptiste.leduc@gmail.com>
  */
 interface MapperMetadataInterface
 {

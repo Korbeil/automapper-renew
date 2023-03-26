@@ -6,7 +6,10 @@ use Jane\Component\AutoMapper\MapperMetadataInterface;
 use Symfony\Component\PropertyInfo\Type;
 
 /**
+ * Create a decorated transformer to handle builtin types.
+ *
  * @author Joel Wurtz <jwurtz@jolicode.com>
+ * @author Baptiste Leduc <baptiste.leduc@gmail.com>
  */
 final class BuiltinTransformerFactory implements TransformerFactoryInterface, PrioritizedTransformerFactoryInterface
 {
@@ -38,9 +41,6 @@ final class BuiltinTransformerFactory implements TransformerFactoryInterface, Pr
         return null;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getPriority(): int
     {
         return 8;

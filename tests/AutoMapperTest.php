@@ -19,6 +19,7 @@ use Symfony\Component\Uid\Uuid;
 
 /**
  * @author Joel Wurtz <jwurtz@jolicode.com>
+ * @author Baptiste Leduc <baptiste.leduc@gmail.com>
  */
 class AutoMapperTest extends AutoMapperBaseTest
 {
@@ -598,7 +599,7 @@ class AutoMapperTest extends AutoMapperBaseTest
     {
         if (Kernel::MAJOR_VERSION < 6) {
             $nameConverter = new class() implements AdvancedNameConverterInterface {
-                public function normalize($propertyName, ?string $class = null, ?string $format = null, array $context = [])
+                public function normalize(string $propertyName, ?string $class = null, ?string $format = null, array $context = []): string
                 {
                     if ('id' === $propertyName) {
                         return '@id';
@@ -607,7 +608,7 @@ class AutoMapperTest extends AutoMapperBaseTest
                     return $propertyName;
                 }
 
-                public function denormalize($propertyName, ?string $class = null, ?string $format = null, array $context = [])
+                public function denormalize(string $propertyName, ?string $class = null, ?string $format = null, array $context = []): string
                 {
                     if ('@id' === $propertyName) {
                         return 'id';
@@ -688,21 +689,6 @@ class AutoMapperTest extends AutoMapperBaseTest
 
         $data = ['test' => 'foo'];
         $array = $this->autoMapper->map($data, 'array');
-    }
-
-    public function testInvalidMappingSource(): void
-    {
-        self::expectException(NoMappingFoundException::class);
-
-        $array = $this->autoMapper->map('test', 'array');
-    }
-
-    public function testInvalidMappingTarget(): void
-    {
-        self::expectException(NoMappingFoundException::class);
-
-        $data = ['test' => 'foo'];
-        $array = $this->autoMapper->map($data, 3);
     }
 
     public function testNoAutoRegister(): void

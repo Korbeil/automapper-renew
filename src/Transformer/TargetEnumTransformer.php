@@ -15,11 +15,9 @@ use PhpParser\Node\Name;
  */
 final class TargetEnumTransformer implements TransformerInterface
 {
-    public $targetClassName;
-
-    public function __construct(string $targetClassName)
-    {
-        $this->targetClassName = $targetClassName;
+    public function __construct(
+        private readonly string $targetClassName,
+    ) {
     }
 
     public function transform(Expr $input, Expr $target, PropertyMapping $propertyMapping, UniqueVariableScope $uniqueVariableScope): array

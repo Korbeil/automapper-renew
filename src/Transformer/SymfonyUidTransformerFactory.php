@@ -13,13 +13,10 @@ use Symfony\Component\Uid\Ulid;
 final class SymfonyUidTransformerFactory extends AbstractUniqueTypeTransformerFactory implements PrioritizedTransformerFactoryInterface
 {
     /**
-     * @var array
+     * @var array<string, array{0: bool, 1: bool}>
      */
-    private $reflectionCache = [];
+    private array $reflectionCache = [];
 
-    /**
-     * {@inheritdoc}
-     */
     protected function createTransformer(Type $sourceType, Type $targetType, MapperMetadataInterface $mapperMetadata): ?TransformerInterface
     {
         $isSourceUid = $this->isUid($sourceType);
@@ -58,9 +55,6 @@ final class SymfonyUidTransformerFactory extends AbstractUniqueTypeTransformerFa
         return $this->reflectionCache[$type->getClassName()][0];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getPriority(): int
     {
         return 24;

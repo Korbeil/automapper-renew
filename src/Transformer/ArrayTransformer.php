@@ -8,12 +8,7 @@ use PhpParser\Node\Expr;
  * Transformer array decorator.
  *
  * @author Joel Wurtz <jwurtz@jolicode.com>
- */
-
-/**
- * Transformer array decorator.
- *
- * @author Joel Wurtz <jwurtz@jolicode.com>
+ * @author Baptiste Leduc <baptiste.leduc@gmail.com>
  */
 final class ArrayTransformer extends AbstractArrayTransformer
 {

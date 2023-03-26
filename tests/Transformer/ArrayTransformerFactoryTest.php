@@ -9,6 +9,9 @@ use Jane\Component\AutoMapper\Transformer\CopyTransformer;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\PropertyInfo\Type;
 
+/**
+ * @author Baptiste Leduc <baptiste.leduc@gmail.com>
+ */
 class ArrayTransformerFactoryTest extends TestCase
 {
     public function testGetTransformer(): void

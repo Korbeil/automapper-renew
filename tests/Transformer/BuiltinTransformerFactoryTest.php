@@ -8,6 +8,9 @@ use Jane\Component\AutoMapper\Transformer\BuiltinTransformerFactory;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\PropertyInfo\Type;
 
+/**
+ * @author Baptiste Leduc <baptiste.leduc@gmail.com>
+ */
 class BuiltinTransformerFactoryTest extends TestCase
 {
     public function testGetTransformer(): void

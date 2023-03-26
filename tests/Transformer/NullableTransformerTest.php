@@ -7,6 +7,9 @@ use Jane\Component\AutoMapper\Transformer\NullableTransformer;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\PropertyInfo\Type;
 
+/**
+ * @author Baptiste Leduc <baptiste.leduc@gmail.com>
+ */
 class NullableTransformerTest extends TestCase
 {
     use EvalTransformerTrait;

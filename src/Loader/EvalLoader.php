@@ -10,25 +10,21 @@ use PhpParser\PrettyPrinter\Standard;
  * Use eval to load mappers.
  *
  * @author Joel Wurtz <jwurtz@jolicode.com>
+ * @author Baptiste Leduc <baptiste.leduc@gmail.com>
  */
 final class EvalLoader implements ClassLoaderInterface
 {
-    private $generator;
+    private Standard $printer;
 
-    private $printer;
-
-    public function __construct(Generator $generator)
-    {
-        $this->generator = $generator;
+    public function __construct(
+        private readonly Generator $generator,
+    ) {
         $this->printer = new Standard();
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function loadClass(MapperGeneratorMetadataInterface $mapperGeneratorMetadata): void
+    public function loadClass(MapperGeneratorMetadataInterface $mapperMetadata): void
     {
-        $class = $this->generator->generate($mapperGeneratorMetadata);
+        $class = $this->generator->generate($mapperMetadata);
 
         eval($this->printer->prettyPrint([$class]));
     }

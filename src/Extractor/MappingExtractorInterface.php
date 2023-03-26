@@ -10,6 +10,7 @@ use Jane\Component\AutoMapper\MapperMetadataInterface;
  * @internal
  *
  * @author Joel Wurtz <jwurtz@jolicode.com>
+ * @author Baptiste Leduc <baptiste.leduc@gmail.com>
  */
 interface MappingExtractorInterface
 {

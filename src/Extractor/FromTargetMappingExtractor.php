@@ -18,23 +18,23 @@ use Symfony\Component\Serializer\NameConverter\AdvancedNameConverterInterface;
  * Can use a NameConverter to use specific properties name in the source
  *
  * @author Joel Wurtz <jwurtz@jolicode.com>
+ * @author Baptiste Leduc <baptiste.leduc@gmail.com>
  */
 final class FromTargetMappingExtractor extends MappingExtractor
 {
     private const ALLOWED_SOURCES = ['array', \stdClass::class];
 
-    private $nameConverter;
-
-    public function __construct(PropertyInfoExtractorInterface $propertyInfoExtractor, PropertyReadInfoExtractorInterface $readInfoExtractor, PropertyWriteInfoExtractorInterface $writeInfoExtractor, TransformerFactoryInterface $transformerFactory, ClassMetadataFactoryInterface $classMetadataFactory = null, AdvancedNameConverterInterface $nameConverter = null)
+    public function __construct(
+        PropertyInfoExtractorInterface $propertyInfoExtractor,
+        PropertyReadInfoExtractorInterface $readInfoExtractor,
+        PropertyWriteInfoExtractorInterface $writeInfoExtractor,
+        TransformerFactoryInterface $transformerFactory,
+        ClassMetadataFactoryInterface $classMetadataFactory = null,
+        private readonly ?AdvancedNameConverterInterface $nameConverter = null)
     {
         parent::__construct($propertyInfoExtractor, $readInfoExtractor, $writeInfoExtractor, $transformerFactory, $classMetadataFactory);
-
-        $this->nameConverter = $nameConverter;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getPropertiesMapping(MapperMetadataInterface $mapperMetadata): array
     {
         $targetProperties = array_unique($this->propertyInfoExtractor->getProperties($mapperMetadata->getTarget()) ?? []);
@@ -98,10 +98,10 @@ final class FromTargetMappingExtractor extends MappingExtractor
             $property = $this->nameConverter->normalize($property, $target, $source);
         }
 
-        $sourceAccessor = new ReadAccessor(ReadAccessor::TYPE_ARRAY_DIMENSION, $property);
+        $sourceAccessor = new ReadAccessor(ReadAccessorType::ARRAY_DIMENSION, $property);
 
         if (\stdClass::class === $source) {
-            $sourceAccessor = new ReadAccessor(ReadAccessor::TYPE_PROPERTY, $property);
+            $sourceAccessor = new ReadAccessor(ReadAccessorType::PROPERTY, $property);
         }
 
         return $sourceAccessor;

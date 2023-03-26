@@ -27,8 +27,7 @@ use Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader;
  */
 class FromTargetMappingExtractorTest extends AutoMapperBaseTest
 {
-    /** @var FromTargetMappingExtractor */
-    protected $fromTargetMappingExtractor;
+    protected FromTargetMappingExtractor $fromTargetMappingExtractor;
 
     protected function setUp(): void
     {
@@ -82,7 +81,7 @@ class FromTargetMappingExtractorTest extends AutoMapperBaseTest
 
         self::assertCount(\count($userReflection->getProperties()), $targetPropertiesMapping);
         foreach ($targetPropertiesMapping as $propertyMapping) {
-            self::assertTrue($userReflection->hasProperty($propertyMapping->getProperty()));
+            self::assertTrue($userReflection->hasProperty($propertyMapping->property));
         }
     }
 
@@ -94,7 +93,7 @@ class FromTargetMappingExtractorTest extends AutoMapperBaseTest
 
         self::assertCount(\count($userReflection->getProperties()), $targetPropertiesMapping);
         foreach ($targetPropertiesMapping as $propertyMapping) {
-            self::assertTrue($userReflection->hasProperty($propertyMapping->getProperty()));
+            self::assertTrue($userReflection->hasProperty($propertyMapping->property));
         }
     }
 

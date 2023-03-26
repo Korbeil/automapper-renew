@@ -10,19 +10,15 @@ use PhpParser\Node\Expr;
  * Transform a \DateTimeInterface object to a string.
  *
  * @author Joel Wurtz <jwurtz@jolicode.com>
+ * @author Baptiste Leduc <baptiste.leduc@gmail.com>
  */
 final class SymfonyUidToStringTransformer implements TransformerInterface
 {
-    private $isUlid;
-
-    public function __construct(bool $isUlid)
-    {
-        $this->isUlid = $isUlid;
+    public function __construct(
+        private readonly bool $isUlid,
+    ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function transform(Expr $input, Expr $target, PropertyMapping $propertyMapping, UniqueVariableScope $uniqueVariableScope): array
     {
         if ($this->isUlid) {

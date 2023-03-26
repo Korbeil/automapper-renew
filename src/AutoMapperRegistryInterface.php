@@ -6,6 +6,7 @@ namespace Jane\Component\AutoMapper;
  * Allows to retrieve a mapper.
  *
  * @author Joel Wurtz <jwurtz@jolicode.com>
+ * @author Baptiste Leduc <baptiste.leduc@gmail.com>
  */
 interface AutoMapperRegistryInterface
 {

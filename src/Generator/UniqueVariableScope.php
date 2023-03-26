@@ -8,13 +8,14 @@ namespace Jane\Component\AutoMapper\Generator;
  * @internal
  *
  * @author Joel Wurtz <jwurtz@jolicode.com>
+ * @author Baptiste Leduc <baptiste.leduc@gmail.com>
  */
 final class UniqueVariableScope
 {
-    private $registry = [];
+    private array $registry = [];
 
     /**
-     * Return an unique name for a variable name.
+     * Return a unique name for a variable name.
      */
     public function getUniqueName(string $name): string
     {
@@ -28,6 +29,6 @@ final class UniqueVariableScope
 
         ++$this->registry[$name];
 
-        return "{$name}_{$this->registry[$name]}";
+        return sprintf('%s_%s', $name, $this->registry[$name]);
     }
 }

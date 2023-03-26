@@ -10,29 +10,24 @@ use PhpParser\PrettyPrinter\Standard;
  * Use file system to load mapper, and persist them using a registry.
  *
  * @author Joel Wurtz <jwurtz@jolicode.com>
+ * @author Baptiste Leduc <baptiste.leduc@gmail.com>
  */
 final class FileLoader implements ClassLoaderInterface
 {
-    private $generator;
-    private $directory;
-    private $hotReload;
-    private $printer;
-    private $registry;
+    private Standard $printer;
+    private ?array $registry = null;
 
-    public function __construct(Generator $generator, string $directory, bool $hotReload = true)
-    {
-        $this->generator = $generator;
-        $this->directory = $directory;
-        $this->hotReload = $hotReload;
+    public function __construct(
+        private readonly Generator $generator,
+        private readonly string $directory,
+        private readonly bool $hotReload = true
+    ) {
         $this->printer = new Standard();
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function loadClass(MapperGeneratorMetadataInterface $mapperGeneratorMetadata): void
+    public function loadClass(MapperGeneratorMetadataInterface $mapperMetadata): void
     {
-        $className = $mapperGeneratorMetadata->getMapperClassName();
+        $className = $mapperMetadata->getMapperClassName();
         $classPath = $this->directory . \DIRECTORY_SEPARATOR . $className . '.php';
 
         if (!$this->hotReload && file_exists($classPath)) {
@@ -44,12 +39,12 @@ final class FileLoader implements ClassLoaderInterface
         $shouldSaveMapper = true;
         if ($this->hotReload) {
             $registry = $this->getRegistry();
-            $hash = $mapperGeneratorMetadata->getHash();
+            $hash = $mapperMetadata->getHash();
             $shouldSaveMapper = !isset($registry[$className]) || $registry[$className] !== $hash || !file_exists($classPath);
         }
 
         if ($shouldSaveMapper) {
-            $this->saveMapper($mapperGeneratorMetadata);
+            $this->saveMapper($mapperMetadata);
         }
 
         require $classPath;
@@ -74,7 +69,7 @@ final class FileLoader implements ClassLoaderInterface
         $this->write($registryPath, "<?php\n\nreturn " . var_export($this->registry, true) . ";\n");
     }
 
-    private function getRegistry()
+    private function getRegistry(): array
     {
         if (!$this->registry) {
             $registryPath = $this->directory . \DIRECTORY_SEPARATOR . 'registry.php';

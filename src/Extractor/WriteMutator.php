@@ -14,29 +14,19 @@ use PhpParser\Node\Stmt;
  * Writes mutator tell how to write to a property.
  *
  * @author Joel Wurtz <jwurtz@jolicode.com>
+ * @author Baptiste Leduc <baptiste.leduc@gmail.com>
  */
 final class WriteMutator
 {
-    public const TYPE_METHOD = 1;
-    public const TYPE_PROPERTY = 2;
-    public const TYPE_ARRAY_DIMENSION = 3;
-    public const TYPE_CONSTRUCTOR = 4;
-    public const TYPE_ADDER_AND_REMOVER = 5;
-
-    private $type;
-    private $name;
-    private $private;
-    private $parameter;
-
-    public function __construct(int $type, string $name, bool $private = false, \ReflectionParameter $parameter = null)
-    {
-        $this->type = $type;
-        $this->name = $name;
-        $this->private = $private;
-        $this->parameter = $parameter;
+    public function __construct(
+        private readonly WriteMutatorType      $type,
+        private readonly string                $name,
+        private readonly bool                  $private = false,
+        private readonly ?\ReflectionParameter $parameter = null
+    ) {
     }
 
-    public function getType(): int
+    public function getType(): WriteMutatorType
     {
         return $this->type;
     }
@@ -48,13 +38,13 @@ final class WriteMutator
      */
     public function getExpression(Expr\Variable $output, Expr $value, bool $byRef = false): ?Expr
     {
-        if (self::TYPE_METHOD === $this->type || self::TYPE_ADDER_AND_REMOVER === $this->type) {
+        if (WriteMutatorType::METHOD === $this->type || WriteMutatorType::ADDER_AND_REMOVER === $this->type) {
             return new Expr\MethodCall($output, $this->name, [
                 new Arg($value),
             ]);
         }
 
-        if (self::TYPE_PROPERTY === $this->type) {
+        if (WriteMutatorType::PROPERTY === $this->type) {
             if ($this->private) {
                 return new Expr\FuncCall(
                     new Expr\ArrayDimFetch(new Expr\PropertyFetch(new Expr\Variable('this'), 'hydrateCallbacks'), new Scalar\String_($this->name)),
@@ -71,7 +61,7 @@ final class WriteMutator
             return new Expr\Assign(new Expr\PropertyFetch($output, $this->name), $value);
         }
 
-        if (self::TYPE_ARRAY_DIMENSION === $this->type) {
+        if (WriteMutatorType::ARRAY_DIMENSION === $this->type) {
             if ($byRef) {
                 return new Expr\AssignRef(new Expr\ArrayDimFetch($output, new Scalar\String_($this->name)), $value);
             }
@@ -87,7 +77,7 @@ final class WriteMutator
      */
     public function getHydrateCallback($className): ?Expr
     {
-        if (self::TYPE_PROPERTY !== $this->type || !$this->private) {
+        if (WriteMutatorType::PROPERTY !== $this->type || !$this->private) {
             return null;
         }
 

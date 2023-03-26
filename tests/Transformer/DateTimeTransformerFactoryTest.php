@@ -12,6 +12,9 @@ use Jane\Component\AutoMapper\Transformer\StringToDateTimeTransformer;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\PropertyInfo\Type;
 
+/**
+ * @author Baptiste Leduc <baptiste.leduc@gmail.com>
+ */
 class DateTimeTransformerFactoryTest extends TestCase
 {
     public function testGetTransformer()

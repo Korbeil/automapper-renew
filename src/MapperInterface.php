@@ -5,9 +5,10 @@ namespace Jane\Component\AutoMapper;
 /**
  * Interface implemented by a single mapper.
  *
- * Each specific mapper should implements this interface
+ * Each specific mapper should implement this interface
  *
  * @author Joel Wurtz <jwurtz@jolicode.com>
+ * @author Baptiste Leduc <baptiste.leduc@gmail.com>
  */
 interface MapperInterface
 {
@@ -17,5 +18,5 @@ interface MapperInterface
      *
      * @return mixed The mapped value
      */
-    public function &map($value, array $context = []);
+    public function &map(mixed $value, array $context = []): mixed;
 }

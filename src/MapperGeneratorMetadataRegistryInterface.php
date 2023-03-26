@@ -8,6 +8,7 @@ use Jane\Component\AutoMapper\Transformer\TransformerFactoryInterface;
  * Registry of metadata.
  *
  * @author Joel Wurtz <jwurtz@jolicode.com>
+ * @author Baptiste Leduc <baptiste.leduc@gmail.com>
  */
 interface MapperGeneratorMetadataRegistryInterface
 {

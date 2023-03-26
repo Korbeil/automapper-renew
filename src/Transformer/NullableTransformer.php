@@ -9,24 +9,20 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Stmt;
 
 /**
- * Tansformer decorator to handle null values.
+ * Transformer decorator to handle null values.
  *
  * @author Joel Wurtz <jwurtz@jolicode.com>
+ * @author Baptiste Leduc <baptiste.leduc@gmail.com>
  */
 final class NullableTransformer implements TransformerInterface, DependentTransformerInterface
 {
-    private $itemTransformer;
-    private $isTargetNullable;
 
-    public function __construct(TransformerInterface $itemTransformer, bool $isTargetNullable)
-    {
-        $this->itemTransformer = $itemTransformer;
-        $this->isTargetNullable = $isTargetNullable;
+    public function __construct(
+        private readonly TransformerInterface $itemTransformer,
+        private readonly bool $isTargetNullable
+    ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function transform(Expr $input, Expr $target, PropertyMapping $propertyMapping, UniqueVariableScope $uniqueVariableScope): array
     {
         [$output, $itemStatements] = $this->itemTransformer->transform($input, $target, $propertyMapping, $uniqueVariableScope);
@@ -48,9 +44,6 @@ final class NullableTransformer implements TransformerInterface, DependentTransf
         return [$newOutput ?? $output, $statements];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getDependencies(): array
     {
         if (!$this->itemTransformer instanceof DependentTransformerInterface) {

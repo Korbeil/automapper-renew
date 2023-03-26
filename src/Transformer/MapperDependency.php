@@ -8,34 +8,14 @@ namespace Jane\Component\AutoMapper\Transformer;
  * @internal
  *
  * @author Joel Wurtz <jwurtz@jolicode.com>
+ * @author Baptiste Leduc <baptiste.leduc@gmail.com>
  */
 final class MapperDependency
 {
-    private $name;
-
-    private $source;
-
-    private $target;
-
-    public function __construct(string $name, string $source, string $target)
-    {
-        $this->name = $name;
-        $this->source = $source;
-        $this->target = $target;
-    }
-
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
-    public function getSource(): string
-    {
-        return $this->source;
-    }
-
-    public function getTarget(): string
-    {
-        return $this->target;
+    public function __construct(
+        public readonly string $name,
+        public readonly string $source,
+        public readonly string $target,
+    ) {
     }
 }

@@ -11,6 +11,9 @@ use Jane\Component\AutoMapper\Transformer\MultipleTransformerFactory;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\PropertyInfo\Type;
 
+/**
+ * @author Baptiste Leduc <baptiste.leduc@gmail.com>
+ */
 class MultipleTransformerFactoryTest extends TestCase
 {
     public function testGetTransformer()

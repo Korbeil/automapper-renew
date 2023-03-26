@@ -14,31 +14,19 @@ use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactoryInterface;
  * @internal
  *
  * @author Joel Wurtz <jwurtz@jolicode.com>
+ * @author Baptiste Leduc <baptiste.leduc@gmail.com>
  */
 abstract class MappingExtractor implements MappingExtractorInterface
 {
-    protected $propertyInfoExtractor;
-
-    protected $transformerFactory;
-
-    protected $readInfoExtractor;
-
-    protected $writeInfoExtractor;
-
-    protected $classMetadataFactory;
-
-    public function __construct(PropertyInfoExtractorInterface $propertyInfoExtractor, PropertyReadInfoExtractorInterface $readInfoExtractor, PropertyWriteInfoExtractorInterface $writeInfoExtractor, TransformerFactoryInterface $transformerFactory, ClassMetadataFactoryInterface $classMetadataFactory = null)
-    {
-        $this->propertyInfoExtractor = $propertyInfoExtractor;
-        $this->readInfoExtractor = $readInfoExtractor;
-        $this->writeInfoExtractor = $writeInfoExtractor;
-        $this->transformerFactory = $transformerFactory;
-        $this->classMetadataFactory = $classMetadataFactory;
+    public function __construct(
+        protected readonly PropertyInfoExtractorInterface $propertyInfoExtractor,
+        private readonly PropertyReadInfoExtractorInterface $readInfoExtractor,
+        private readonly PropertyWriteInfoExtractorInterface $writeInfoExtractor,
+        protected readonly TransformerFactoryInterface $transformerFactory,
+        private readonly ?ClassMetadataFactoryInterface $classMetadataFactory = null
+    ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getReadAccessor(string $source, string $target, string $property): ?ReadAccessor
     {
         $readInfo = $this->readInfoExtractor->getReadInfo($source, $property);
@@ -47,10 +35,10 @@ abstract class MappingExtractor implements MappingExtractorInterface
             return null;
         }
 
-        $type = ReadAccessor::TYPE_PROPERTY;
+        $type = ReadAccessorType::PROPERTY;
 
         if (PropertyReadInfo::TYPE_METHOD === $readInfo->getType()) {
-            $type = ReadAccessor::TYPE_METHOD;
+            $type = ReadAccessorType::METHOD;
         }
 
         return new ReadAccessor(
@@ -60,9 +48,6 @@ abstract class MappingExtractor implements MappingExtractorInterface
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getWriteMutator(string $source, string $target, string $property, array $context = []): ?WriteMutator
     {
         $writeInfo = $this->writeInfoExtractor->getWriteInfo($target, $property, $context);
@@ -78,17 +63,17 @@ abstract class MappingExtractor implements MappingExtractorInterface
         if (PropertyWriteInfo::TYPE_CONSTRUCTOR === $writeInfo->getType()) {
             $parameter = new \ReflectionParameter([$target, '__construct'], $writeInfo->getName());
 
-            return new WriteMutator(WriteMutator::TYPE_CONSTRUCTOR, $writeInfo->getName(), false, $parameter);
+            return new WriteMutator(WriteMutatorType::CONSTRUCTOR, $writeInfo->getName(), false, $parameter);
         }
 
-        $type = WriteMutator::TYPE_PROPERTY;
+        $type = WriteMutatorType::PROPERTY;
 
         if (PropertyWriteInfo::TYPE_METHOD === $writeInfo->getType()) {
-            $type = WriteMutator::TYPE_METHOD;
+            $type = WriteMutatorType::METHOD;
         }
 
         if (PropertyWriteInfo::TYPE_ADDER_AND_REMOVER === $writeInfo->getType()) {
-            $type = WriteMutator::TYPE_ADDER_AND_REMOVER;
+            $type = WriteMutatorType::ADDER_AND_REMOVER;
             $writeInfo = $writeInfo->getAdderInfo();
         }
 

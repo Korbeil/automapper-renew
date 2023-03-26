@@ -4,6 +4,7 @@ namespace Jane\Component\AutoMapper\Tests;
 
 use Doctrine\Common\Annotations\AnnotationReader;
 use Jane\Component\AutoMapper\AutoMapper;
+use Jane\Component\AutoMapper\AutoMapperInterface;
 use Jane\Component\AutoMapper\Generator\Generator;
 use Jane\Component\AutoMapper\Loader\ClassLoaderInterface;
 use Jane\Component\AutoMapper\Loader\FileLoader;
@@ -18,11 +19,8 @@ use Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader;
  */
 abstract class AutoMapperBaseTest extends TestCase
 {
-    /** @var AutoMapper */
-    protected $autoMapper;
-
-    /** @var ClassLoaderInterface */
-    protected $loader;
+    protected AutoMapperInterface $autoMapper;
+    protected ClassLoaderInterface $loader;
 
     protected function setUp(): void
     {

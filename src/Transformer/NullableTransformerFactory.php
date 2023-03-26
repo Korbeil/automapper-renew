@@ -7,19 +7,15 @@ use Symfony\Component\PropertyInfo\Type;
 
 /**
  * @author Joel Wurtz <jwurtz@jolicode.com>
+ * @author Baptiste Leduc <baptiste.leduc@gmail.com>
  */
 final class NullableTransformerFactory implements TransformerFactoryInterface, PrioritizedTransformerFactoryInterface
 {
-    private $chainTransformerFactory;
-
-    public function __construct(ChainTransformerFactory $chainTransformerFactory)
-    {
-        $this->chainTransformerFactory = $chainTransformerFactory;
+    public function __construct(
+        private readonly ChainTransformerFactory $chainTransformerFactory
+    ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getTransformer(?array $sourceTypes, ?array $targetTypes, MapperMetadataInterface $mapperMetadata): ?TransformerInterface
     {
         $nbSourceTypes = $sourceTypes ? \count($sourceTypes) : 0;
@@ -61,9 +57,6 @@ final class NullableTransformerFactory implements TransformerFactoryInterface, P
         return new NullableTransformer($subTransformer, $isTargetNullable);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getPriority(): int
     {
         return 64;

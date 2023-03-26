@@ -8,19 +8,15 @@ use Symfony\Component\PropertyInfo\Type;
 
 /**
  * @author Joel Wurtz <jwurtz@jolicode.com>
+ * @author Baptiste Leduc <baptiste.leduc@gmail.com>
  */
 final class ObjectTransformerFactory extends AbstractUniqueTypeTransformerFactory implements PrioritizedTransformerFactoryInterface
 {
-    private $autoMapper;
-
-    public function __construct(AutoMapperRegistryInterface $autoMapper)
-    {
-        $this->autoMapper = $autoMapper;
+    public function __construct(
+        private readonly AutoMapperRegistryInterface $autoMapperRegistry,
+    ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function createTransformer(Type $sourceType, Type $targetType, MapperMetadataInterface $mapperMetadata): ?TransformerInterface
     {
         // Only deal with source type being an object or an array that is not a collection
@@ -39,7 +35,7 @@ final class ObjectTransformerFactory extends AbstractUniqueTypeTransformerFactor
             $targetTypeName = $targetType->getClassName();
         }
 
-        if (null !== $sourceTypeName && null !== $targetTypeName && $this->autoMapper->hasMapper($sourceTypeName, $targetTypeName)) {
+        if (null !== $sourceTypeName && null !== $targetTypeName && $this->autoMapperRegistry->hasMapper($sourceTypeName, $targetTypeName)) {
             return new ObjectTransformer($sourceType, $targetType);
         }
 
@@ -63,9 +59,6 @@ final class ObjectTransformerFactory extends AbstractUniqueTypeTransformerFactor
         return true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getPriority(): int
     {
         return 2;

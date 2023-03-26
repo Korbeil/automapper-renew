@@ -6,6 +6,8 @@ use Jane\Component\AutoMapper\MapperMetadataInterface;
 use Symfony\Component\PropertyInfo\Type;
 
 /**
+ * Create a decorated transformer to handle enum type.
+ *
  * @author Baptiste Leduc <baptiste.leduc@gmail.com>
  */
 final class EnumTransformerFactory extends AbstractUniqueTypeTransformerFactory implements PrioritizedTransformerFactoryInterface
@@ -24,7 +26,7 @@ final class EnumTransformerFactory extends AbstractUniqueTypeTransformerFactory 
 
         // both source & target are enums
         if ($this->isEnumType($sourceType) && $this->isEnumType($targetType)) {
-            return new CopyEnumTransformer();
+            return new CopyTransformer();
         }
 
         return null;
@@ -49,6 +51,6 @@ final class EnumTransformerFactory extends AbstractUniqueTypeTransformerFactory 
 
     public function getPriority(): int
     {
-        return 3;
+        return 2;
     }
 }

@@ -18,23 +18,23 @@ use Symfony\Component\Serializer\NameConverter\AdvancedNameConverterInterface;
  * Can use a NameConverter to use specific properties name in the target
  *
  * @author Joel Wurtz <jwurtz@jolicode.com>
+ * @author Baptiste Leduc <baptiste.leduc@gmail.com>
  */
 final class FromSourceMappingExtractor extends MappingExtractor
 {
     private const ALLOWED_TARGETS = ['array', \stdClass::class];
 
-    private $nameConverter;
-
-    public function __construct(PropertyInfoExtractorInterface $propertyInfoExtractor, PropertyReadInfoExtractorInterface $readInfoExtractor, PropertyWriteInfoExtractorInterface $writeInfoExtractor, TransformerFactoryInterface $transformerFactory, ClassMetadataFactoryInterface $classMetadataFactory = null, AdvancedNameConverterInterface $nameConverter = null)
+    public function __construct(
+        PropertyInfoExtractorInterface $propertyInfoExtractor,
+        PropertyReadInfoExtractorInterface $readInfoExtractor,
+        PropertyWriteInfoExtractorInterface $writeInfoExtractor,
+        TransformerFactoryInterface $transformerFactory,
+        ClassMetadataFactoryInterface $classMetadataFactory = null,
+        private readonly ?AdvancedNameConverterInterface $nameConverter = null)
     {
         parent::__construct($propertyInfoExtractor, $readInfoExtractor, $writeInfoExtractor, $transformerFactory, $classMetadataFactory);
-
-        $this->nameConverter = $nameConverter;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getPropertiesMapping(MapperMetadataInterface $mapperMetadata): array
     {
         $sourceProperties = $this->propertyInfoExtractor->getProperties($mapperMetadata->getSource());
@@ -121,19 +121,16 @@ final class FromSourceMappingExtractor extends MappingExtractor
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getWriteMutator(string $source, string $target, string $property, array $context = []): WriteMutator
     {
         if (null !== $this->nameConverter) {
             $property = $this->nameConverter->normalize($property, $source, $target);
         }
 
-        $targetMutator = new WriteMutator(WriteMutator::TYPE_ARRAY_DIMENSION, $property, false);
+        $targetMutator = new WriteMutator(WriteMutatorType::ARRAY_DIMENSION, $property, false);
 
         if (\stdClass::class === $target) {
-            $targetMutator = new WriteMutator(WriteMutator::TYPE_PROPERTY, $property, false);
+            $targetMutator = new WriteMutator(WriteMutatorType::PROPERTY, $property, false);
         }
 
         return $targetMutator;

@@ -6,22 +6,27 @@ namespace Jane\Component\AutoMapper;
  * Class derived for each generated mapper.
  *
  * @author Joel Wurtz <jwurtz@jolicode.com>
+ * @author Baptiste Leduc <baptiste.leduc@gmail.com>
  */
 abstract class GeneratedMapper implements MapperInterface
 {
-    protected $mappers = [];
+    protected array $mappers = [];
 
-    protected $callbacks;
+    /** @var array<string, callable> */
+    protected array $callbacks;
 
-    protected $hydrateCallbacks = [];
+    /** @var array<string, callable> */
+    protected array $hydrateCallbacks = [];
 
-    protected $extractCallbacks = [];
+    /** @var array<string, callable> */
+    protected array $extractCallbacks = [];
 
-    protected $cachedTarget;
+    protected object $cachedTarget;
 
-    protected $circularReferenceHandler;
+    /** @var null|callable */
+    protected $circularReferenceHandler = null;
 
-    protected $circularReferenceLimit;
+    protected ?int $circularReferenceLimit = null;
 
     /**
      * Add a callable for a specific property.

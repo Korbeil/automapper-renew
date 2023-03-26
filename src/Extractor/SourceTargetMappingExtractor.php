@@ -8,12 +8,10 @@ use Jane\Component\AutoMapper\MapperMetadataInterface;
  * Extracts mapping between two objects, only gives properties that have the same name.
  *
  * @author Joel Wurtz <jwurtz@jolicode.com>
+ * @author Baptiste Leduc <baptiste.leduc@gmail.com>
  */
 class SourceTargetMappingExtractor extends MappingExtractor
 {
-    /**
-     * {@inheritdoc}
-     */
     public function getPropertiesMapping(MapperMetadataInterface $mapperMetadata): array
     {
         $sourceProperties = $this->propertyInfoExtractor->getProperties($mapperMetadata->getSource());
@@ -23,8 +21,8 @@ class SourceTargetMappingExtractor extends MappingExtractor
             return [];
         }
 
-        $sourceProperties = array_unique($sourceProperties ?? []);
-        $targetProperties = array_unique($targetProperties ?? []);
+        $sourceProperties = array_unique($sourceProperties);
+        $targetProperties = array_unique($targetProperties);
 
         $mapping = [];
 
@@ -70,7 +68,7 @@ class SourceTargetMappingExtractor extends MappingExtractor
                 $mapping[] = new PropertyMapping(
                     $sourceAccessor,
                     $targetMutator,
-                    WriteMutator::TYPE_CONSTRUCTOR === $targetMutatorConstruct->getType() ? $targetMutatorConstruct : null,
+                    WriteMutatorType::CONSTRUCTOR === $targetMutatorConstruct->getType() ? $targetMutatorConstruct : null,
                     $transformer,
                     $property,
                     false,

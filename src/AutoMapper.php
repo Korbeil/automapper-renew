@@ -35,42 +35,28 @@ use Symfony\Component\Uid\AbstractUid;
  * Maps a source data structure (object or array) to a target one.
  *
  * @author Joel Wurtz <jwurtz@jolicode.com>
+ * @author Baptiste Leduc <baptiste.leduc@gmail.com>
  */
 class AutoMapper implements AutoMapperInterface, AutoMapperRegistryInterface, MapperGeneratorMetadataRegistryInterface
 {
     /** @var MapperGeneratorMetadataInterface[] */
-    private $metadata = [];
+    private array $metadata = [];
 
     /** @var GeneratedMapper[] */
-    private $mapperRegistry = [];
+    private array $mapperRegistry = [];
 
-    /** @var ClassLoaderInterface */
-    private $classLoader;
-
-    /** @var MapperGeneratorMetadataFactoryInterface|null */
-    private $mapperConfigurationFactory;
-
-    /** @var ChainTransformerFactory */
-    private $chainTransformerFactory;
-
-    public function __construct(ClassLoaderInterface $classLoader, ChainTransformerFactory $chainTransformerFactory, MapperGeneratorMetadataFactoryInterface $mapperConfigurationFactory = null)
+    public function __construct(
+        private readonly ClassLoaderInterface $classLoader,
+        private readonly ChainTransformerFactory $chainTransformerFactory,
+        private readonly ?MapperGeneratorMetadataFactoryInterface $mapperConfigurationFactory = null)
     {
-        $this->classLoader = $classLoader;
-        $this->mapperConfigurationFactory = $mapperConfigurationFactory;
-        $this->chainTransformerFactory = $chainTransformerFactory;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function register(MapperGeneratorMetadataInterface $metadata): void
+    public function register(MapperGeneratorMetadataInterface $configuration): void
     {
-        $this->metadata[$metadata->getSource()][$metadata->getTarget()] = $metadata;
+        $this->metadata[$configuration->getSource()][$configuration->getTarget()] = $configuration;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getMapper(string $source, string $target): MapperInterface
     {
         $metadata = $this->getMetadata($source, $target);
@@ -99,60 +85,50 @@ class AutoMapper implements AutoMapperInterface, AutoMapperRegistryInterface, Ma
         return $this->mapperRegistry[$className];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function hasMapper(string $source, string $target): bool
     {
         return null !== $this->getMetadata($source, $target);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function map($sourceData, $targetData, array $context = [])
+    public function map(null|array|object $source, string|array|object $target, array $context = []): null|array|object
     {
-        $source = null;
-        $target = null;
+        $guessedSource = $guessedTarget = null;
 
-        if (null === $sourceData) {
+        if (null === $source) {
             return null;
         }
 
-        if (\is_object($sourceData)) {
-            $source = \get_class($sourceData);
-        } elseif (\is_array($sourceData)) {
-            $source = 'array';
+        if (\is_object($source)) {
+            $guessedSource = \get_class($source);
+        } elseif (\is_array($source)) {
+            $guessedSource = 'array';
         }
 
-        if (null === $source) {
+        if (null === $guessedSource) {
             throw new NoMappingFoundException('Cannot map this value, source is neither an object or an array.');
         }
 
-        if (\is_object($targetData)) {
-            $target = \get_class($targetData);
-            $context[MapperContext::TARGET_TO_POPULATE] = $targetData;
-        } elseif (\is_array($targetData)) {
-            $target = 'array';
-            $context[MapperContext::TARGET_TO_POPULATE] = $targetData;
-        } elseif (\is_string($targetData)) {
-            $target = $targetData;
+        if (\is_object($target)) {
+            $guessedTarget = \get_class($target);
+            $context[MapperContext::TARGET_TO_POPULATE] = $target;
+        } elseif (\is_array($target)) {
+            $guessedTarget = 'array';
+            $context[MapperContext::TARGET_TO_POPULATE] = $target;
+        } elseif (\is_string($target)) {
+            $guessedTarget = $target;
         }
 
-        if (null === $target) {
+        if (null === $guessedTarget) {
             throw new NoMappingFoundException('Cannot map this value, target is neither an object or an array.');
         }
 
-        if ('array' === $source && 'array' === $target) {
+        if ('array' === $guessedSource && 'array' === $guessedTarget) {
             throw new NoMappingFoundException('Cannot map this value, both source and target are array.');
         }
 
-        return $this->getMapper($source, $target)->map($sourceData, $context);
+        return $this->getMapper($guessedSource, $guessedTarget)->map($source, $context);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getMetadata(string $source, string $target): ?MapperGeneratorMetadataInterface
     {
         if (!isset($this->metadata[$source][$target])) {
@@ -166,9 +142,6 @@ class AutoMapper implements AutoMapperInterface, AutoMapperRegistryInterface, Ma
         return $this->metadata[$source][$target];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function bindTransformerFactory(TransformerFactoryInterface $transformerFactory): void
     {
         if (!$this->chainTransformerFactory->hasTransformerFactory($transformerFactory)) {
@@ -186,7 +159,7 @@ class AutoMapper implements AutoMapperInterface, AutoMapperRegistryInterface, Ma
         string $classPrefix = 'Mapper_',
         bool $attributeChecking = true,
         bool $autoRegister = true,
-        string $dateTimeFormat = \DateTime::RFC3339
+        string $dateTimeFormat = \DateTimeInterface::RFC3339
     ): self {
         $classMetadataFactory = new ClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
 
@@ -203,13 +176,7 @@ class AutoMapper implements AutoMapperInterface, AutoMapperRegistryInterface, Ma
             $flags |= ReflectionExtractor::ALLOW_PROTECTED | ReflectionExtractor::ALLOW_PRIVATE;
         }
 
-        $reflectionExtractor = new ReflectionExtractor(
-            null,
-            null,
-            null,
-            true,
-            $flags
-        );
+        $reflectionExtractor = new ReflectionExtractor(accessFlags: $flags);
 
         $phpDocExtractor = new PhpDocExtractor();
         $propertyInfoExtractor = new PropertyInfoExtractor(

@@ -8,6 +8,9 @@ use Jane\Component\AutoMapper\Transformer\CopyTransformer;
 use Jane\Component\AutoMapper\Transformer\TransformerFactoryInterface;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @author Baptiste Leduc <baptiste.leduc@gmail.com>
+ */
 class ChainTransformerFactoryTest extends TestCase
 {
     public function testGetTransformer()

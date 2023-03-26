@@ -10,6 +10,7 @@ use Jane\Component\AutoMapper\Exception\CircularReferenceException;
  * Allows to customize how is done the mapping
  *
  * @author Joel Wurtz <jwurtz@jolicode.com>
+ * @author Baptiste Leduc <baptiste.leduc@gmail.com>
  */
 class MapperContext
 {
@@ -25,7 +26,7 @@ class MapperContext
     public const CONSTRUCTOR_ARGUMENTS = 'constructor_arguments';
     public const SKIP_NULL_VALUES = 'skip_null_values';
 
-    private $context = [
+    private array $context = [
         self::DEPTH => 0,
         self::CIRCULAR_REFERENCE_REGISTRY => [],
         self::CIRCULAR_COUNT_REFERENCE_REGISTRY => [],
@@ -87,7 +88,7 @@ class MapperContext
     }
 
     /**
-     * Whether a reference has reached it's limit.
+     * Whether a reference has reached its limit.
      */
     public static function shouldHandleCircularReference(array $context, string $reference, ?int $circularReferenceLimit = null): bool
     {
@@ -109,11 +110,9 @@ class MapperContext
     /**
      * Handle circular reference for a specific reference.
      *
-     * By default will try to keep it and return the previous value
-     *
-     * @return mixed
+     * By default, will try to keep it and return the previous value
      */
-    public static function &handleCircularReference(array &$context, string $reference, $object, ?int $circularReferenceLimit = null, callable $callback = null)
+    public static function &handleCircularReference(array &$context, string $reference, $object, ?int $circularReferenceLimit = null, callable $callback = null): mixed
     {
         if (null === $callback) {
             $callback = $context[self::CIRCULAR_REFERENCE_HANDLER] ?? null;
@@ -175,7 +174,7 @@ class MapperContext
     }
 
     /**
-     * Clone context with a incremented depth.
+     * Clone context with an incremented depth.
      */
     public static function withIncrementedDepth(array $context): array
     {
@@ -186,7 +185,7 @@ class MapperContext
     }
 
     /**
-     * Check wether an argument exist for the constructor for a specific class.
+     * Check whether an argument exist for the constructor for a specific class.
      */
     public static function hasConstructorArgument(array $context, string $class, string $key): bool
     {
@@ -196,7 +195,7 @@ class MapperContext
     /**
      * Get constructor argument for a specific class.
      */
-    public static function getConstructorArgument(array $context, string $class, string $key)
+    public static function getConstructorArgument(array $context, string $class, string $key): mixed
     {
         return $context[self::CONSTRUCTOR_ARGUMENTS][$class][$key] ?? null;
     }
