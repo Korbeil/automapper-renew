@@ -52,10 +52,6 @@ final class FromTargetMappingExtractor extends MappingExtractor
             throw new InvalidMappingException('Only array or stdClass are accepted as a source');
         }
 
-        if (null === $targetProperties) {
-            return [];
-        }
-
         $mapping = [];
 
         foreach ($targetProperties as $property) {

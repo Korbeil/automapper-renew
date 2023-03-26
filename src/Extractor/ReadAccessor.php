@@ -65,8 +65,6 @@ final class ReadAccessor
         if (ReadAccessorType::SOURCE === $this->type) {
             return $input;
         }
-
-        throw new CompileException('Invalid accessor for read expression');
     }
 
     /**

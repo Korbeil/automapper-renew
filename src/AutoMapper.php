@@ -127,10 +127,6 @@ class AutoMapper implements AutoMapperInterface, AutoMapperRegistryInterface, Ma
             $guessedTarget = $target;
         }
 
-        if (null === $guessedTarget) {
-            throw new NoMappingFoundException('Cannot map this value, target is neither an object or an array.');
-        }
-
         if ('array' === $guessedSource && 'array' === $guessedTarget) {
             throw new NoMappingFoundException('Cannot map this value, both source and target are array.');
         }

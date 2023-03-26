@@ -12,6 +12,7 @@
 namespace Jane\Component\AutoMapper\Normalizer;
 
 use Jane\Component\AutoMapper\AutoMapperInterface;
+use Jane\Component\AutoMapper\AutoMapperRegistryInterface;
 use Jane\Component\AutoMapper\MapperContext;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Normalizer\CacheableSupportsMethodInterface;
@@ -27,7 +28,7 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 class AutoMapperNormalizer implements NormalizerInterface, DenormalizerInterface, CacheableSupportsMethodInterface
 {
     public function __construct(
-        private readonly AutoMapperInterface $autoMapper,
+        private readonly AutoMapperInterface&AutoMapperRegistryInterface $autoMapper,
     ) {
     }
 

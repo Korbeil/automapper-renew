@@ -43,7 +43,7 @@ final class MultipleTransformer implements TransformerInterface, DependentTransf
         Type::BUILTIN_TYPE_ITERABLE => 'is_iterable',
     ];
 
-    /** @var TransformerInterface[] */
+    /** @var array<array{transformer: TransformerInterface, type: Type}> */
     private array $transformers;
 
     public function __construct(array $transformers)
